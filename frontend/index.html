@@ -4,87 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Click Game</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        font-family: Arial, sans-serif;
-      }
-      button {
-        font-size: 20px;
-        padding: 10px 20px;
-      }
-      #timer {
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-      #score {
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="timer">Time: 10</div>
     <div id="score">Score: 0</div>
-    <button onclick="incrementScore()">Click me!</button>
+    <div id="player-name">
+      <label for="name">Enter your name: </label>
+      <input type="text" id="name" />
+    </div>
+    <button onclick="startGame()">Click me!</button>
+    <div id="top-scores"></div>
 
-    <script>
-      let score = 0;
-      let timeLeft = 10;
-      const timerElement = document.getElementById("timer");
-      const scoreElement = document.getElementById("score");
-
-      function incrementScore() {
-        if (timeLeft > 0) {
-          score += 1;
-          scoreElement.textContent = `Score: ${score}`;
-        }
-      }
-
-      function startTimer() {
-        const timer = setInterval(() => {
-          if (timeLeft > 0) {
-            timeLeft -= 1;
-            timerElement.textContent = `Time: ${timeLeft}`;
-          } else {
-            clearInterval(timer);
-            alert(`Time's up! Your score is ${score}`);
-            submitScore();
-          }
-        }, 1000);
-      }
-
-      async function submitScore() {
-        await fetch("http://localhost:5000/score", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ score }),
-        });
-        const response = await fetch("http://localhost:5000/scores");
-        const scores = await response.json();
-        displayScores(scores);
-      }
-
-      function displayScores(scores) {
-        const scoresElement = document.createElement("div");
-        scoresElement.innerHTML = "<h2>Top Scores</h2>";
-        const scoresList = document.createElement("ul");
-        scores.forEach((score) => {
-          const li = document.createElement("li");
-          li.textContent = `Score: ${score[1]} (at ${score[2]})`;
-          scoresList.appendChild(li);
-        });
-        scoresElement.appendChild(scoresList);
-        document.body.appendChild(scoresElement);
-      }
-
-      startTimer();
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
