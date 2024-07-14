@@ -1,15 +1,13 @@
 services:
   api:
-    container_name: api
-    image: qpus/clickapi
+    build: ./api
     ports:
       - "5000:5000"
     volumes:
       - ./api:/app
 
   frontend:
-    container_name: frontend
-    image: qpus/click_frontend
+    build: ./frontend
     ports:
       - "80:80"
     depends_on:
