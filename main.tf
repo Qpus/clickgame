@@ -23,27 +23,27 @@ resource "aws_instance" "ClickGameInstance" {
   tags = {
     Name = "Click Game"
   }
+     user_data = file("docker.sh")
+  #  user_data = <<-EOF
+  #             #!/bin/bash
+  #             sudo apt-get update
+  #             sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+  #             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  #             sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  #             sudo apt-get update
+  #             sudo apt-get install -y docker-ce
+  #             sudo systemctl start docker
+  #             sudo systemctl enable docker
 
-   user_data = <<-EOF
-              #!/bin/bash
-              sudo apt-get update
-              sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-              sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-              sudo apt-get update
-              sudo apt-get install -y docker-ce
-              sudo systemctl start docker
-              sudo systemctl enable docker
+  #             git clone https://github.com/Qpus/clickgame.git
 
-              git clone https://github.com/Qpus/clickgame.git
+  #             cd clickgame/
 
-              cd clickgame/
+  #             rm main.tf
 
-              rm main.tf
+  #             sudo docker compose up -d --build
 
-              sudo docker compose up -d --build
-
-              EOF
+  #             EOF
 }
 
 resource "aws_security_group" "sg_ssh_https" {
