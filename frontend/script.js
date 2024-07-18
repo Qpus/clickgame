@@ -39,7 +39,7 @@ function startGame() {
   incrementScore();
 }
 async function submitScore(playerName) {
-  const response = await fetch("http://localhost:5000/score", {
+  const response = await fetch("http://172.18.0.2:5000/score", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -47,7 +47,7 @@ async function submitScore(playerName) {
     body: JSON.stringify({ player_name: playerName, score: score }),
   });
   if (response.ok) {
-    const scoresResponse = await fetch("http://localhost:5000/scores");
+    const scoresResponse = await fetch("http://172.18.0.2:5000/scores");
     const scores = await scoresResponse.json();
     displayScores(scores);
     resetGame();

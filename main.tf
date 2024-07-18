@@ -24,21 +24,26 @@ resource "aws_instance" "ClickGameInstance" {
     Name = "Click Game"
   }
 
-  user_data = <<EOF
-    #!/bin/bash
-    
-    sudo snap install docker
+   user_data = <<-EOF
+              #!/bin/bash
+              sudo apt-get update
+              sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+              sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+              sudo apt-get update
+              sudo apt-get install -y docker-ce
+              sudo systemctl start docker
+              sudo systemctl enable docker
 
-    # Clone the ClickGame repository
-    git clone https://github.com/Qpus/clickgame.git
+              git clone https://github.com/Qpus/clickgame.git
 
-    # Navigate into the repository directory
-    cd clickgame/
+              cd clickgame/
 
-    # Start the Docker Compose services
-    sudo docker compose up -d
+              rm main.tf
 
-  EOF
+              sudo docker compose up -d --build
+
+              EOF
 }
 
 resource "aws_security_group" "sg_ssh_https" {
@@ -54,13 +59,6 @@ resource "aws_security_group" "sg_ssh_https" {
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
-  }
-
-  ingress {
-    cidr_blocks = ["192.168.0.0/16"]
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
   }
 
   egress {
